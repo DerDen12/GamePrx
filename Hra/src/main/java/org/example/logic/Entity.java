@@ -9,7 +9,7 @@ public class Entity {
     protected int height;
     protected Image image;
 
-    public Entity(int x, int y, String url) {
+    public Entity(int x, int y, String url, int health) {
         this.coord = new Coordinates(x,y);
 
 
@@ -53,7 +53,7 @@ public class Entity {
         return image;
     }
 
-    protected Rectangle getRectangle(){
+    public Rectangle getRectangle(){
         return new Rectangle(coord.x, coord.y,width, height);
     }
 

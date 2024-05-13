@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.logic.Enemy;
 import org.example.logic.Wall;
 
 import javax.swing.*;
@@ -43,12 +44,9 @@ public class GameGraphics extends JFrame {
                     g.drawLine(wall.getCoordStart().x, wall.getCoordStart().y, wall.getCoordEnd().x, wall.getCoordEnd().y);
                 }
             }
-            g.drawImage(logic.getEnemy().getImage(), logic.getEnemy().getCoord().x, logic.getEnemy().getCoord().y, new ImageObserver() {
-                @Override
-                public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
-                    return false;
-                }
-            });
+            for (Enemy enemy : logic.getEnemies()) {
+                g.drawImage(enemy.getImage(), enemy.getCoord().x, enemy.getCoord().y, this);
+            }
         }
     }
 }
