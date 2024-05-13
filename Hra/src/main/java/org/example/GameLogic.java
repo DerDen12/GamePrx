@@ -8,6 +8,7 @@ import org.example.logic.Wall;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameLogic {
     private Ball ball;
@@ -42,6 +43,14 @@ public class GameLogic {
             ball.getHealth(ball.setHealth(ball.health- 1));
 
             ball.setInvincible(true);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    ball.setInvincible(false);
+
+                }
+            }, 2000);
             
 
         }
