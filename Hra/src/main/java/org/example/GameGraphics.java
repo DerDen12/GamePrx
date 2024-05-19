@@ -15,7 +15,7 @@ public class GameGraphics extends JFrame {
         this.draw = new Draw();
         this.logic = logic;
 
-        setSize(1080, 720);
+        setSize(1200, 860);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);

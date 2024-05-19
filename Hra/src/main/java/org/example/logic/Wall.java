@@ -12,6 +12,7 @@ public class Wall {
         this.color = color;
         this.coordStart = new Coordinates(x1, y1);
         this.coordEnd = new Coordinates(x2, y2);
+        this.active = true;
 
     }
 

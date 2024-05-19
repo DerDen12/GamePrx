@@ -31,20 +31,21 @@ public class Game {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode()) {
-                    case KeyEvent.VK_LEFT -> {
-                        logic.getBall().move(20, Direction.LEFT);
-                    }
-                    case KeyEvent.VK_RIGHT -> {
-                        logic.getBall().move(20, Direction.RIGHT);
-                    }
-                    case KeyEvent.VK_UP -> {
-                        logic.getBall().move(20, Direction.UP);
-                    }
-                    case KeyEvent.VK_DOWN -> {
-                        logic.getBall().move(20, Direction.DOWN);
-                    }
+                switch (e.getKeyCode()){
+                    case KeyEvent.VK_LEFT:
+                        controlledMove(Direction.LEFT);
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        controlledMove(Direction.RIGHT);
+                        break;
+                    case KeyEvent.VK_UP:
+                        controlledMove(Direction.UP);
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        controlledMove(Direction.DOWN);
+                        break;
                 }
+
             }
 
             @Override
@@ -102,7 +103,12 @@ public class Game {
         }
          */
     }
+    private void controlledMove(Direction direction) {
+        if (!logic.predictBallCollision(direction)){
+            logic.movePlayer(direction);
 
+        }
+    }
     public GameLogic getLogic() {
         return logic;
     }
