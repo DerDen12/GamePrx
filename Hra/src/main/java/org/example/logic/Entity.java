@@ -2,6 +2,8 @@ package org.example.logic;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
+
 
 public class Entity {
     protected Coordinates coord;
@@ -9,10 +11,11 @@ public class Entity {
     protected int height;
     protected Image image;
 
-    public Entity(int x, int y, String url, int health) {
+
+    public Entity(int x, int y, String url, int health, int damage) {
         this.coord = new Coordinates(x,y);
 
-        ImageIcon ii = new ImageIcon(getClass().getResource("/" + url));
+        ImageIcon ii = new ImageIcon(Objects.requireNonNull(getClass().getResource("/" + url)));
         this.image = ii.getImage();
 
         this.width = ii.getIconWidth();

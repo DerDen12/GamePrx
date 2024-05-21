@@ -25,21 +25,40 @@ public class GameLogic {
 
     public void initialize() {
 
-        ball = new Ball(450, 150, "bombgreen.jpg",4);
+        ball = new Ball(450, 150, "bombgreen.jpg",4,2);
 
-        Enemy enemy1 = new Enemy(250, 250, "bomb.jpg",1,10);
+        Enemy enemy1 = new Enemy(250, 250, "hoplitPředekIdle.png",1,10);
         enemies.add(enemy1);
+
 
 
         Wall wall2 = new Wall(0, 90, 1200, 90, Color.BLACK);
 
         walls.add(wall2);
 
+        StartEnemySpawner();
+
+    }
+    private void spawnEnemyHoplit() {
+        int x = (int) (Math.random() * 1100);
+        String url = "hoplitPředekIdle.png";
+        int y = 0;
+        int health = 10;
+        int damage = 1;
+
+        Enemy newEnemy = new Enemy(x,y,url,damage,health);
+        enemies.add(newEnemy);
     }
 
-
-
-
+    private void StartEnemySpawner() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                spawnEnemyHoplit();
+            }
+        },0,6000);
+    }
 
 
     public void update() {
@@ -50,16 +69,20 @@ public class GameLogic {
             // Direction LEFT, RIGHT
             if(ball.getCoord().x - enemy.getCoord().x > 0) {
                 enemy.move(3, Direction.RIGHT);
+                enemy.setAnimation("hoplitVpravo.gif");
             } else {
                 enemy.move(3, Direction.LEFT);
+                enemy.setAnimation("hoplitVlevo.gif");
             }
          }
          else {
             // Direction UP, DOWN
             if(ball.getCoord().y - enemy.getCoord().y > 0) {
                 enemy.move(3, Direction.DOWN);
+                enemy.setAnimation("hoplitPředek.gif");
             } else {
                 enemy.move(3, Direction.UP);
+                enemy.setAnimation("hoplitZezadu.gif");
             }
          }
         }
@@ -69,8 +92,6 @@ public class GameLogic {
                 enemyTouchedPlayer();
             }
         }
-        //ball.move(2, Direction.RIGHT);
-
         for (Wall wall: walls) {
             if (ball.isCollided(wall.getRectangle())){
                 System.out.println("dotekzdi");
@@ -105,8 +126,6 @@ public class GameLogic {
             }
             return false;
         }
-
-
     public void enemyTouchedPlayer () {
         if (!ball.isInvincible()) {
             ball.getHealth(ball.setHealth(ball.health- 1));
@@ -119,15 +138,12 @@ public class GameLogic {
                     ball.setInvincible(false);
 
                 }
-            }, 2000);
-
-
+            }, 3000);
         }
-
-
     }
     public void movePlayer(Direction direction) {
         ball.move(BALL_STEPS, direction);
+
 
     }
 

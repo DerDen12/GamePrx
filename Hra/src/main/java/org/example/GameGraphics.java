@@ -32,12 +32,8 @@ public class GameGraphics extends JFrame {
     public class Draw extends JPanel{
         @Override
         protected void paintComponent(Graphics g) {
-            g.drawImage(logic.getBall().getImage(), logic.getBall().getX(), logic.getBall().getY(), new ImageObserver() {
-                @Override
-                public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
-                    return false;
-                }
-            });
+            super.paintComponent(g);
+            g.drawImage(logic.getBall().getImage(), logic.getBall().getX(), logic.getBall().getY(), this);
             for (Wall wall: logic.getWalls()) {
                 if (wall.isActive()){
                     g.setColor(wall.getColor());
@@ -50,3 +46,4 @@ public class GameGraphics extends JFrame {
         }
     }
 }
+
