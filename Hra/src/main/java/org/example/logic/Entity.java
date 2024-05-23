@@ -12,7 +12,7 @@ public class Entity {
     protected Image image;
 
 
-    public Entity(int x, int y, String url, int health, int damage) {
+    public Entity(int x, int y, String url) {
         this.coord = new Coordinates(x,y);
 
         ImageIcon ii = new ImageIcon(Objects.requireNonNull(getClass().getResource("/" + url)));

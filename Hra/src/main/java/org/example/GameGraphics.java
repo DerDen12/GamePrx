@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.logic.BackGround;
 import org.example.logic.Enemy;
 import org.example.logic.Wall;
 
@@ -15,7 +16,7 @@ public class GameGraphics extends JFrame {
         this.draw = new Draw();
         this.logic = logic;
 
-        setSize(1200, 860);
+        setSize(900, 820);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -33,12 +34,13 @@ public class GameGraphics extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+            for (BackGround background : logic.getBackGround()) {
+                g.drawImage(background.getImage(), 0, 0, background.getWidth(), background.getHeight(), this);
+            }
             g.drawImage(logic.getBall().getImage(), logic.getBall().getX(), logic.getBall().getY(), this);
             for (Wall wall: logic.getWalls()) {
-                if (wall.isActive()){
-                    g.setColor(wall.getColor());
+                    //g.setColor(new Color(0,0,0,0));
                     g.drawLine(wall.getCoordStart().x, wall.getCoordStart().y, wall.getCoordEnd().x, wall.getCoordEnd().y);
-                }
             }
             for (Enemy enemy : logic.getEnemies()) {
                 g.drawImage(enemy.getImage(), enemy.getCoord().x, enemy.getCoord().y, this);

@@ -95,13 +95,6 @@ public class Game {
         });
 
         timer.start();
-        /*
-        ;
-        while (!isGameOver){
-            logic.update();
-            graphic.render();
-        }
-         */
     }
     private void controlledMove(Direction direction) {
         if (!logic.predictBallCollision(direction)){
