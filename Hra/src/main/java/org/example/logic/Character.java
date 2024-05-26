@@ -1,6 +1,7 @@
 package org.example.logic;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Character extends Entity {
     public int health;
@@ -14,7 +15,7 @@ public class Character extends Entity {
         super(x,y,url);
         this.health = 5;
         this.invincible = false;
-        this.damage = 1;
+        this.damage = 25;
     }
 
 
@@ -26,12 +27,11 @@ public class Character extends Entity {
         this.invincible = invincible;
     }
 
-    public int setHealth(int health) {
+    public void setHealth(int health) {
         this.health = health;
-        return health;
     }
 
-    public int getHealth(int i) {
+    public int getHealth() {
         return health;
     }
 
@@ -39,5 +39,7 @@ public class Character extends Entity {
         return getRectangle().intersects(otherObject);
     }
 
-
+    public int getDamage() {
+        return damage;
+    }
 }
