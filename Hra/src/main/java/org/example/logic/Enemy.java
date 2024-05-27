@@ -5,9 +5,11 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Enemy extends Entity {
-    int health;
+    public int health;
     private int maxHealth;
     boolean isDamaged;
+
+
     public Enemy(int x, int y, String url) {
         super(x, y, url);
         this.maxHealth = 100;
@@ -20,6 +22,7 @@ public class Enemy extends Entity {
     public int getHealth() {
         return health;
     }
+
 
     public void setHealth(int health) {
         this.health = health;

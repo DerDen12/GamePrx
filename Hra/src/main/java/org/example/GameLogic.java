@@ -50,8 +50,35 @@ public class GameLogic {
             enemies.add(newEnemy);
         }
     }
+    private void enemyWave() {
+        int x = (int) (Math.random()*600) + 400;
+        String url = "enemyHoplit/hoplitPředekIdle.png";
+        int y = 0;
+        Enemy newEnemy1 = new Enemy(x, y, url);
+        Enemy newEnemy2 = new Enemy(x, y, url);
+        Enemy newEnemy3 = new Enemy(x, y, url);
+        Enemy newEnemy4 = new Enemy(x, y, url);
+        Enemy newEnemy5 = new Enemy(x, y, url);
 
 
+        synchronized (enemies) {
+
+            enemies.add(newEnemy1);
+            enemies.add(newEnemy2);
+            enemies.add(newEnemy3);
+            enemies.add(newEnemy4);
+            enemies.add(newEnemy5);
+        }
+    }
+    private void startEnemyWave() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                enemyWave();
+            }
+        },20000,20000);
+    }
     private void startEnemySpawner() {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -101,8 +128,8 @@ public class GameLogic {
             }
             if (ball.isCollided(enemy.getRectangle())&& ball.health !=-1) {
                 enemyTouchedPlayer();
-            }
-            }
+                }
+              }
             }
         }
         for (Wall wall: walls) {
@@ -153,6 +180,13 @@ public class GameLogic {
             }, 3000);
         }
     }
+    public void enemyDeath() {
+        for (Enemy enemy : enemies) {
+            if (enemy.health >= 0) {
+                enemies.remove(enemy);
+            }
+        }
+    }
     public void BossTouchedPlayer () {
         if (!ball.isInvincible()) {
             int updatedHealth = ball.getHealth()-2;
@@ -177,7 +211,7 @@ public class GameLogic {
 
         synchronized (enemies) {
             for (Enemy enemy : enemies) {
-                if (attackRange.intersects(enemy.getRectangle())) {
+                if (attackRange.intersects(enemy.getRectangle()) && enemy.health !=0) {
                     int newHealth = enemy.getHealth() - damage;
                     enemy.setHealth(newHealth);
                     System.out.println("životy nepiřtele jsou "+newHealth);

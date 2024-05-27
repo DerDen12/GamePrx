@@ -70,7 +70,6 @@ public class Game {
                 graphic.render(logic);
             }
         });
-
         timer.start();
     }
     private void controlledMove(Direction direction) {

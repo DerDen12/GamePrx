@@ -62,7 +62,7 @@ public class GameGraphics extends JFrame {
             int barX = enemy.getCoord().x + (enemy.getWidth() - barWidth) / 2;
             int barY = enemy.getCoord().y - barHeight - 2;
 
-            int healthPercentage = (int) ((double) enemy.getHealth() / enemy.getMaxHealth() * 100);
+            int healthPercentage = (int) ((double) enemy.getHealth() / enemy.getMaxHealth()*100);
             Color healthColor = new Color(255, 0, 0);
             if (healthPercentage > 49) {
                 healthColor = new Color(255 - (int) (255 * ((healthPercentage - 50) / 50.0)), 255, 0);
