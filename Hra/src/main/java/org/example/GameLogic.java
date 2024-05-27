@@ -8,14 +8,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 public class GameLogic {
     private ArrayList<BackGround> backgrounds;
-    private Character ball;
+    private Character character;
     private ArrayList<Enemy> enemies;
     private ArrayList<Wall> walls;
     private final int BALL_STEPS = 20;
     private ArrayList<BossEnemy> bossEnemies;
     int level;
     public GameLogic() {
-        this.ball = null;
+        this.character = null;
         this.walls = new ArrayList<>();
         this.enemies = new ArrayList<>();
         this.backgrounds = new ArrayList<>();
@@ -23,7 +23,7 @@ public class GameLogic {
     }
     public void initialize() {
         level = 1;
-        ball = new Character(450, 150, "bombgreen.jpg");
+        character = new Character(450, 150, "bombgreen.jpg");
         System.out.println(level);
         Wall wall1 = new Wall(0, 90, 1200, 90);
         Wall wall2 = new Wall(0, 570, 420, 570);
@@ -102,13 +102,13 @@ public class GameLogic {
             Iterator<Enemy> iterator = enemies.iterator();
             while (iterator.hasNext()) {
                 Enemy enemy = iterator.next();
-                int differenceX = Math.abs(ball.getCoord().x - enemy.getCoord().x);
-                int differenceY = Math.abs(ball.getCoord().y - enemy.getCoord().y);
+                int differenceX = Math.abs(character.getCoord().x - enemy.getCoord().x);
+                int differenceY = Math.abs(character.getCoord().y - enemy.getCoord().y);
 
                 if (!enemy.isDamaged()) {
                 if (differenceX > differenceY) {
                 // Move horizontally
-                if(ball.getCoord().x - enemy.getCoord().x > 0) {
+                if(character.getCoord().x - enemy.getCoord().x > 0) {
                     enemy.move(3, Direction.RIGHT);
                     enemy.setAnimation("enemyHoplit/hoplitVpravo.gif");
                 } else {
@@ -117,7 +117,7 @@ public class GameLogic {
                 }
             } else {
                 // Move vertically
-                if(ball.getCoord().y - enemy.getCoord().y > 0) {
+                if(character.getCoord().y - enemy.getCoord().y > 0) {
                     enemy.move(3, Direction.DOWN);
                     enemy.setAnimation("enemyHoplit/hoplitPředek.gif");
 
@@ -126,21 +126,22 @@ public class GameLogic {
                     enemy.setAnimation("enemyHoplit/hoplitZezadu.gif");
                 }
             }
-            if (ball.isCollided(enemy.getRectangle())&& ball.health !=-1) {
+            if (character.isCollided(enemy.getRectangle())&& character.health !=-1) {
                 enemyTouchedPlayer();
                 }
               }
             }
+            enemyDeath();
         }
         for (Wall wall: walls) {
-            if (ball.isCollided(wall.getRectangle())){
+            if (character.isCollided(wall.getRectangle())){
                 System.out.println("dotekzdi");
                 wall.inactivate();
             }
         }
     }
         public boolean predictBallCollision(Direction direction){
-            return predictCollision(direction, ball, BALL_STEPS);
+            return predictCollision(direction, character, BALL_STEPS);
         }
         private boolean predictCollision(Direction direction, Entity entity, int steps) {
             Rectangle moveRectangle = new Rectangle();
@@ -166,47 +167,53 @@ public class GameLogic {
             return false;
         }
     public void enemyTouchedPlayer () {
-        if (!ball.isInvincible()) {
-            int updatedHealth = ball.getHealth()-1;
-            ball.setHealth(updatedHealth);
-            ball.setInvincible(true);
+        if (!character.isInvincible()) {
+            int updatedHealth = character.getHealth()-1;
+            character.setHealth(updatedHealth);
+            character.setInvincible(true);
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    ball.setInvincible(false);
+                    character.setInvincible(false);
 
                 }
             }, 3000);
         }
     }
     public void enemyDeath() {
-        for (Enemy enemy : enemies) {
-            if (enemy.health >= 0) {
-                enemies.remove(enemy);
+        synchronized (enemies) {
+            Iterator<Enemy> iterator = enemies.iterator();
+            while (iterator.hasNext()) {
+                Enemy enemy = iterator.next();
+                if (enemy.getHealth() <= 0) {
+                    iterator.remove();
+                }
             }
         }
     }
+
+
     public void BossTouchedPlayer () {
-        if (!ball.isInvincible()) {
-            int updatedHealth = ball.getHealth()-2;
-            ball.setHealth(updatedHealth);
-            ball.setInvincible(true);
+        if (!character.isInvincible()) {
+            int updatedHealth = character.getHealth()-2;
+            character.setHealth(updatedHealth);
+            character.setInvincible(true);
             Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    ball.setInvincible(false);
+                    character.setInvincible(false);
                 }
             }, 3000);
         }
     }
     public void movePlayer(Direction direction) {
-        ball.move(BALL_STEPS, direction);
+        character.move(BALL_STEPS, direction);
     }
     public void playerAttack() {
-        Rectangle attackRange = new Rectangle(ball.getX() - 20, ball.getY() - 20, ball.getWidth() + 40, ball.getHeight() + 40);
-        int damage = ball.getDamage();
+        Rectangle attackRange = new Rectangle(character.getX() - 20, character.getY() - 20, character.getWidth() + 40, character.getHeight() + 40);
+        int damage = character.getDamage();
         System.out.println("Attack range: " + attackRange);
 
         synchronized (enemies) {
@@ -229,7 +236,7 @@ public class GameLogic {
         }
     }
     public Character getBall() {
-        return ball;
+        return character;
     }
     public ArrayList<Enemy> getEnemies() {
         return enemies;
