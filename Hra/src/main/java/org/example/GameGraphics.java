@@ -55,7 +55,9 @@ public class GameGraphics extends JFrame {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Arial", Font.BOLD, 40));
             g.drawString(String.valueOf(logic.getBall().getHealth()), healthDisplay.getX()+65 + healthDisplay.getWidth(), healthDisplay.getY()+735 + healthDisplay.getHeight());
+
         }
+
         private void drawHealthBar(Graphics g, Enemy enemy) {
             int barWidth = 50;
             int barHeight = 5;

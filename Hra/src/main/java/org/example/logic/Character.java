@@ -1,7 +1,9 @@
 package org.example.logic;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Character extends Entity {
     public int health;
@@ -17,7 +19,9 @@ public class Character extends Entity {
         this.invincible = false;
         this.damage = 25;
     }
-
+    public void setAnimation(String url) {
+        this.image = new ImageIcon(Objects.requireNonNull(getClass().getResource("/" + url))).getImage();
+    }
 
     public boolean isInvincible() {
         return invincible;

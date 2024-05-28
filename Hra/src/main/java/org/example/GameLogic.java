@@ -194,6 +194,24 @@ public class GameLogic {
     }
     public void movePlayer(Direction direction) {
         character.move(BALL_STEPS, direction);
+        setCharacterAnimation(direction);
+    }
+
+    private void setCharacterAnimation(Direction direction) {
+        switch (direction) {
+            case LEFT:
+                character.setAnimation("hrdinadoleva.gif");
+                break;
+            case RIGHT:
+                character.setAnimation("hrdinadoprava.gif");
+                break;
+            case UP:
+                character.setAnimation("hlavnipostavazezadu.gif");
+                break;
+            case DOWN:
+                character.setAnimation("hlavnipostavapředek.gif");
+                break;
+        }
     }
     public void playerAttack() {
         Rectangle attackRange = new Rectangle(character.getX() - 10, character.getY() - 20, character.getWidth() +50, character.getHeight() + 50);

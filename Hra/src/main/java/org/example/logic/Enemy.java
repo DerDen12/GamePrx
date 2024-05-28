@@ -12,7 +12,7 @@ public class Enemy extends Entity {
 
     public Enemy(int x, int y, String url) {
         super(x, y, url);
-        this.maxHealth = 100;
+        this.maxHealth = 75;
         this.health = maxHealth;
     }
     public void setAnimation(String url) {

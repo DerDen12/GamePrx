@@ -14,8 +14,8 @@ public class Game {
     }
     public Game() {
         logic = new GameLogic();
-        GameGraphics graphic = new GameGraphics(logic);
         logic.initialize();
+        GameGraphics graphic = new GameGraphics(logic);
         graphic.render(logic);
         graphic.addKeyListener(new KeyListener() {
             @Override
