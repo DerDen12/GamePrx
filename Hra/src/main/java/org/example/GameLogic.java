@@ -32,13 +32,12 @@ public class GameLogic {
         walls.add(wall2);
         walls.add(wall3);
         startEnemySpawner();
-        startEnemySpawner2();
         levelBackGround();
     }
     private void levelBackGround() {
         if (level == 1) {
-           BackGround background = new BackGround("pozadi1.png");
-           backgrounds.add(background);
+           BackGround background1 = new BackGround("pozadi1.png");
+           backgrounds.add(background1);
         }
     }
     private void spawnEnemyHoplit() {
@@ -70,6 +69,8 @@ public class GameLogic {
             enemies.add(newEnemy5);
         }
     }
+
+
     private void startEnemyWave() {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -77,7 +78,7 @@ public class GameLogic {
             public void run() {
                 enemyWave();
             }
-        },20000,20000);
+        },10000,16000);
     }
     private void startEnemySpawner() {
         Timer timer = new Timer();
@@ -87,15 +88,6 @@ public class GameLogic {
                 spawnEnemyHoplit();
             }
         },2000,6000);
-    }
-    private void startEnemySpawner2() {
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                spawnEnemyHoplit();
-            }
-        },4000,8000);
     }
     public void update() {
         synchronized (enemies) {
@@ -167,7 +159,7 @@ public class GameLogic {
             return false;
         }
     public void enemyTouchedPlayer () {
-        if (!character.isInvincible()) {
+        if (!character.isInvincible() && character.health !=0 ) {
             int updatedHealth = character.getHealth()-1;
             character.setHealth(updatedHealth);
             character.setInvincible(true);
@@ -192,27 +184,19 @@ public class GameLogic {
             }
         }
     }
-
-
-    public void BossTouchedPlayer () {
-        if (!character.isInvincible()) {
-            int updatedHealth = character.getHealth()-2;
-            character.setHealth(updatedHealth);
-            character.setInvincible(true);
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    character.setInvincible(false);
-                }
-            }, 3000);
+    public void playerDeath() {
+        if (character.health <=0 ) {
+            gameover();
         }
+    }
+    public void gameover() {
+
     }
     public void movePlayer(Direction direction) {
         character.move(BALL_STEPS, direction);
     }
     public void playerAttack() {
-        Rectangle attackRange = new Rectangle(character.getX() - 20, character.getY() - 20, character.getWidth() + 40, character.getHeight() + 40);
+        Rectangle attackRange = new Rectangle(character.getX() - 10, character.getY() - 20, character.getWidth() +50, character.getHeight() + 50);
         int damage = character.getDamage();
         System.out.println("Attack range: " + attackRange);
 

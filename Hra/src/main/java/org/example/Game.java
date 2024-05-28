@@ -17,7 +17,6 @@ public class Game {
         GameGraphics graphic = new GameGraphics(logic);
         logic.initialize();
         graphic.render(logic);
-        boolean isGameOver = false;
         graphic.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -25,16 +24,16 @@ public class Game {
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()){
-                    case KeyEvent.VK_LEFT:
+                    case KeyEvent.VK_A:
                         controlledMove(Direction.LEFT);
                         break;
-                    case KeyEvent.VK_RIGHT:
+                    case KeyEvent.VK_D:
                         controlledMove(Direction.RIGHT);
                         break;
-                    case KeyEvent.VK_UP:
+                    case KeyEvent.VK_W:
                         controlledMove(Direction.UP);
                         break;
-                    case KeyEvent.VK_DOWN:
+                    case KeyEvent.VK_S:
                         controlledMove(Direction.DOWN);
                         break;
                 }
