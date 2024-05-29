@@ -4,25 +4,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
-public class HealthDisplay {
+public class GameMenu {
     int width;
     int height;
     Image image;
     int x;
     int y;
-    public HealthDisplay(int x,int y,String url) {
+    private boolean visible;
+    public GameMenu(int x, int y, String url) {
         ImageIcon ii = new ImageIcon(Objects.requireNonNull(getClass().getResource("/" + url)));
         this.image = ii.getImage();
         this.y = y;
         this.x = x;
 
     }
-    public int getWidth() {
-        return width;
+
+    public void setWidth(int width) {
+        this.width = width;
     }
-    public int getHeight() {
-        return height;
+
+    public void setHeight(int height) {
+        this.height = height;
     }
+
     public Image getImage() {
         return image;
     }
@@ -31,6 +35,12 @@ public class HealthDisplay {
     }
     public int getY() {
         return y;
+    }
+    public boolean isVisible() {
+        return visible;
+    }
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }
 

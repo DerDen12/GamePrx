@@ -1,6 +1,8 @@
 package org.example;
 import org.example.logic.*;
 import org.example.logic.Character;
+import org.example.logic.GameMenu;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,18 +14,26 @@ public class GameLogic {
     private ArrayList<Enemy> enemies;
     private ArrayList<Wall> walls;
     private final int BALL_STEPS = 20;
-    private ArrayList<BossEnemy> bossEnemies;
+    private boolean isGameRunning;
+    private GameMenu menu;
+
     int level;
     public GameLogic() {
         this.character = null;
         this.walls = new ArrayList<>();
         this.enemies = new ArrayList<>();
         this.backgrounds = new ArrayList<>();
-        this.bossEnemies = new ArrayList<>();
+        isGameRunning = false;
+        this.menu = new GameMenu(0, 0, "Menu.png");
+        this.menu.setVisible(true);
+    }
+    public void startGame() {
+        isGameRunning = true;
+        menu.setVisible(false);
     }
     public void initialize() {
         level = 1;
-        character = new Character(450, 150, "bombgreen.jpg");
+        character = new Character(450, 150, "hlavnipostavaidle.png");
         System.out.println(level);
         Wall wall1 = new Wall(0, 90, 1200, 90);
         Wall wall2 = new Wall(0, 570, 420, 570);
@@ -85,9 +95,11 @@ public class GameLogic {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                if (isGameRunning) {
                 spawnEnemyHoplit();
+                }
             }
-        },2000,6000);
+        },1000,6000);
     }
     public void update() {
         synchronized (enemies) {
@@ -248,5 +260,9 @@ public class GameLogic {
     }
     public ArrayList<BackGround> getBackGround() {
         return backgrounds;
+    }
+
+    public GameMenu getMenu() {
+        return menu;
     }
 }

@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.event.*;
 public class Game {
     GameLogic logic;
+    GameGraphics graphic;
+    boolean gameStarted = false;
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
@@ -15,7 +17,7 @@ public class Game {
     public Game() {
         logic = new GameLogic();
         logic.initialize();
-        GameGraphics graphic = new GameGraphics(logic);
+        graphic = new GameGraphics(logic);
         graphic.render(logic);
         graphic.addKeyListener(new KeyListener() {
             @Override
@@ -36,6 +38,12 @@ public class Game {
                     case KeyEvent.VK_S:
                         controlledMove(Direction.DOWN);
                         break;
+                    case KeyEvent.VK_ENTER:
+                        if (!gameStarted) {
+                            gameStarted = true;
+                            logic.startGame();
+
+                        }
                 }
             }
 

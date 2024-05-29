@@ -1,9 +1,6 @@
 package org.example;
 
-import org.example.logic.BackGround;
-import org.example.logic.Enemy;
-import org.example.logic.HealthDisplay;
-import org.example.logic.Wall;
+import org.example.logic.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,11 +9,13 @@ import java.awt.image.ImageObserver;
 public class GameGraphics extends JFrame {
     Draw draw;
     GameLogic logic;
+    private GameMenu menu;
     private HealthDisplay healthDisplay;
     public GameGraphics(GameLogic logic) throws HeadlessException {
 
         this.draw = new Draw();
         this.logic = logic;
+        this.menu = logic.getMenu();
         healthDisplay = new HealthDisplay(0,0,"health_heart.png");
 
         setSize(900, 820);
@@ -38,6 +37,14 @@ public class GameGraphics extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
+            if (menu.isVisible()) {
+                int menuWidth = getWidth();
+                int menuHeight = getHeight();
+
+                logic.getMenu().setWidth(menuWidth);
+                logic.getMenu().setHeight(menuHeight);
+                g.drawImage(logic.getMenu().getImage(), 0, 0, menuWidth, menuHeight, this);
+            } else {
             for (BackGround background : logic.getBackGround()) {
                 g.drawImage(background.getImage(), 0, 0, background.getWidth(), background.getHeight(), this);
             }
@@ -55,7 +62,7 @@ public class GameGraphics extends JFrame {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Arial", Font.BOLD, 40));
             g.drawString(String.valueOf(logic.getBall().getHealth()), healthDisplay.getX()+65 + healthDisplay.getWidth(), healthDisplay.getY()+735 + healthDisplay.getHeight());
-
+            }
         }
 
         private void drawHealthBar(Graphics g, Enemy enemy) {

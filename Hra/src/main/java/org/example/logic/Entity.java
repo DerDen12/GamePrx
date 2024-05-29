@@ -33,7 +33,7 @@ public class Entity {
         }
     }
     public Rectangle getRectangle(){
-        return new Rectangle(coord.x,coord.y,width-50, height-50);
+        return new Rectangle(coord.x,coord.y,width-60, height-60);
     }
     public boolean isCollided (Rectangle otherObject) {
         return getRectangle().intersects(otherObject);
