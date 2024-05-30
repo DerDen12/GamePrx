@@ -2,14 +2,13 @@ package org.example.logic;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Character extends Entity {
     public int health;
     private boolean invincible;
-
     public int damage;
+    private int coins;
 
 
 
@@ -18,9 +17,22 @@ public class Character extends Entity {
         this.health = 5;
         this.invincible = false;
         this.damage = 25;
+        this.coins = 0;
     }
     public void setAnimation(String url) {
         this.image = new ImageIcon(Objects.requireNonNull(getClass().getResource("/" + url))).getImage();
+    }
+    public void addCoins(int amount) {
+        System.out.println("Coin added");
+        this.coins += amount;
+    }
+
+    public String getCoins() {
+        return String.valueOf(coins);
+    }
+
+    public void setCoins(int coins) {
+        this.coins = coins;
     }
 
     public boolean isInvincible() {

@@ -16,7 +16,7 @@ public class GameLogic {
     private final int BALL_STEPS = 20;
     private boolean isGameRunning;
     private GameMenu menu;
-
+    private ArrayList<Coins> coins;
     int level;
     public GameLogic() {
         this.character = null;
@@ -26,6 +26,7 @@ public class GameLogic {
         isGameRunning = false;
         this.menu = new GameMenu(0, 0, "Menu.png");
         this.menu.setVisible(true);
+        this.coins = new ArrayList<>();
     }
     public void startGame() {
         isGameRunning = true;
@@ -143,6 +144,16 @@ public class GameLogic {
                 wall.inactivate();
             }
         }
+        synchronized (coins) {
+            Iterator<Coins> coinIterator = coins.iterator();
+            while (coinIterator.hasNext()) {
+                Coins coin = coinIterator.next();
+                if (character.isCollided(coin.getRectangle())) {
+                    coinIterator.remove();
+                    character.addCoins(coin.amount);
+                }
+            }
+        }
     }
         public boolean predictBallCollision(Direction direction){
             return predictCollision(direction, character, BALL_STEPS);
@@ -191,10 +202,20 @@ public class GameLogic {
             while (iterator.hasNext()) {
                 Enemy enemy = iterator.next();
                 if (enemy.getHealth() <= 0) {
+                    spawnCoin(enemy.getX(), enemy.getY());
                     iterator.remove();
                 }
             }
         }
+    }
+    private void spawnCoin(int x, int y) {
+        System.out.println("mince");
+        Coins coin = new Coins(1,x,y);
+        coin.setgraphic("Mince.png");
+        synchronized (coins) {
+            coins.add(coin);
+        }
+
     }
     public void playerDeath() {
         if (character.health <=0 ) {
@@ -264,5 +285,9 @@ public class GameLogic {
 
     public GameMenu getMenu() {
         return menu;
+    }
+
+    public ArrayList<Coins> getCoins() {
+        return coins;
     }
 }

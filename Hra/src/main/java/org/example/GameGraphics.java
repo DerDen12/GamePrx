@@ -5,18 +5,22 @@ import org.example.logic.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
+import java.util.Objects;
 
 public class GameGraphics extends JFrame {
     Draw draw;
     GameLogic logic;
     private GameMenu menu;
     private HealthDisplay healthDisplay;
+    private Image coinImage;
     public GameGraphics(GameLogic logic) throws HeadlessException {
 
         this.draw = new Draw();
         this.logic = logic;
         this.menu = logic.getMenu();
         healthDisplay = new HealthDisplay(0,0,"health_heart.png");
+        coinImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("/MinceDisplay.png"))).getImage();
+
 
         setSize(900, 820);
         setResizable(false);
@@ -57,11 +61,17 @@ public class GameGraphics extends JFrame {
                 g.drawImage(enemy.getImage(), enemy.getCoord().x, enemy.getCoord().y, this);
                 drawHealthBar(g, enemy);
             }
+            for (Coins coin : logic.getCoins()) {
+                g.drawImage(coin.getImage(), coin.getX(), coin.getY(), this);
+            }
             Image image = healthDisplay.getImage();
             g.drawImage(image,-100,530,this);
-            g.setColor(Color.WHITE);
+            g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.BOLD, 40));
             g.drawString(String.valueOf(logic.getBall().getHealth()), healthDisplay.getX()+65 + healthDisplay.getWidth(), healthDisplay.getY()+735 + healthDisplay.getHeight());
+
+            g.drawImage(coinImage, 30, 565, this);
+            g.drawString(logic.getBall().getCoins(), 185, 735);
             }
         }
 
