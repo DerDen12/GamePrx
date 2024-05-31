@@ -14,7 +14,7 @@ public class Character extends Entity {
 
     public Character(int x, int y, String url) {
         super(x,y,url);
-        this.health = 5;
+        this.health = 8;
         this.invincible = false;
         this.damage = 25;
         this.coins = 0;
@@ -23,11 +23,13 @@ public class Character extends Entity {
         this.image = new ImageIcon(Objects.requireNonNull(getClass().getResource("/" + url))).getImage();
     }
     public void addCoins(int amount) {
-        System.out.println("Coin added");
         this.coins += amount;
     }
 
-    public String getCoins() {
+    public int getCoins() {
+        return coins;
+    }
+    public String getCoinsString() {
         return String.valueOf(coins);
     }
 

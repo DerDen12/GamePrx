@@ -13,6 +13,7 @@ public class GameGraphics extends JFrame {
     private GameMenu menu;
     private HealthDisplay healthDisplay;
     private Image coinImage;
+    private Image gameOverImage;
     public GameGraphics(GameLogic logic) throws HeadlessException {
 
         this.draw = new Draw();
@@ -20,7 +21,7 @@ public class GameGraphics extends JFrame {
         this.menu = logic.getMenu();
         healthDisplay = new HealthDisplay(0,0,"health_heart.png");
         coinImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("/MinceDisplay.png"))).getImage();
-
+        gameOverImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("/Gameover.png"))).getImage();
 
         setSize(900, 820);
         setResizable(false);
@@ -49,29 +50,36 @@ public class GameGraphics extends JFrame {
                 logic.getMenu().setHeight(menuHeight);
                 g.drawImage(logic.getMenu().getImage(), 0, 0, menuWidth, menuHeight, this);
             } else {
-            for (BackGround background : logic.getBackGround()) {
-                g.drawImage(background.getImage(), 0, 0, background.getWidth(), background.getHeight(), this);
-            }
-            g.drawImage(logic.getBall().getImage(), logic.getBall().getX(), logic.getBall().getY(), this);
-            for (Wall wall: logic.getWalls()) {
-                    //g.setColor(new Color(0,0,0,0));
-                    g.drawLine(wall.getCoordStart().x, wall.getCoordStart().y, wall.getCoordEnd().x, wall.getCoordEnd().y);
-            }
-            for (Enemy enemy : logic.getEnemies()) {
-                g.drawImage(enemy.getImage(), enemy.getCoord().x, enemy.getCoord().y, this);
-                drawHealthBar(g, enemy);
-            }
-            for (Coins coin : logic.getCoins()) {
-                g.drawImage(coin.getImage(), coin.getX(), coin.getY(), this);
-            }
-            Image image = healthDisplay.getImage();
-            g.drawImage(image,-100,530,this);
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("Arial", Font.BOLD, 40));
-            g.drawString(String.valueOf(logic.getBall().getHealth()), healthDisplay.getX()+65 + healthDisplay.getWidth(), healthDisplay.getY()+735 + healthDisplay.getHeight());
+                if (logic.isGameOver()) {
+                    g.drawImage(gameOverImage, 0, 0, getWidth(), getHeight(), this);
+                } else {
+                   for (BackGround background : logic.getBackGround()) {
+                     g.drawImage(background.getImage(), 0, 0, background.getWidth(), background.getHeight(), this);
+                   }
+                   g.drawImage(logic.getBall().getImage(), logic.getBall().getX(), logic.getBall().getY(), this);
+                   for (Wall wall: logic.getWalls()) {
+                     //g.setColor(new Color(0,0,0,0));
+                     g.drawLine(wall.getCoordStart().x, wall.getCoordStart().y, wall.getCoordEnd().x, wall.getCoordEnd().y);
+                   }
+                   for (Enemy enemy : logic.getEnemies()) {
+                     g.drawImage(enemy.getImage(), enemy.getCoord().x, enemy.getCoord().y, this);
+                   drawHealthBar(g, enemy);
+                   }
+                   for (Coins coin : logic.getCoins()) {
+                     g.drawImage(coin.getImage(), coin.getX(), coin.getY(), this);
+                   }
+                   Image image = healthDisplay.getImage();
+                   g.drawImage(image,-100,530,this);
+                   g.setColor(Color.BLACK);
+                   g.setFont(new Font("Arial", Font.BOLD, 40));
+                   g.drawString(String.valueOf(logic.getBall().getHealth()), healthDisplay.getX()+65 + healthDisplay.getWidth(), healthDisplay.getY()+735 + healthDisplay.getHeight());
 
-            g.drawImage(coinImage, 30, 565, this);
-            g.drawString(logic.getBall().getCoins(), 185, 735);
+                   g.drawImage(coinImage, 30, 565, this);
+                   g.drawString(logic.getBall().getCoinsString(), 185, 735);
+
+                    Boat boat = logic.getBoat();
+                    g.drawImage(boat.getImage(), boat.getX(), boat.getY(), this);
+                }
             }
         }
 

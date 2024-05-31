@@ -15,9 +15,16 @@ public class GameLogic {
     private ArrayList<Wall> walls;
     private final int BALL_STEPS = 20;
     private boolean isGameRunning;
+    private boolean isGameOver;
     private GameMenu menu;
     private ArrayList<Coins> coins;
+    private boolean canAttack;
+    private Boat boat;
     int level;
+    private int[] coinsNeeded = {1, 1, 1};
+    private boolean showAttackRange;
+    private Rectangle attackRangeRectangle;
+
     public GameLogic() {
         this.character = null;
         this.walls = new ArrayList<>();
@@ -27,14 +34,17 @@ public class GameLogic {
         this.menu = new GameMenu(0, 0, "Menu.png");
         this.menu.setVisible(true);
         this.coins = new ArrayList<>();
+        canAttack = false;
     }
     public void startGame() {
         isGameRunning = true;
         menu.setVisible(false);
+        setlevel();
     }
     public void initialize() {
         level = 1;
         character = new Character(450, 150, "hlavnipostavaidle.png");
+        boat = new Boat(530, 620, "Ship.png");
         System.out.println(level);
         Wall wall1 = new Wall(0, 90, 1200, 90);
         Wall wall2 = new Wall(0, 570, 420, 570);
@@ -42,14 +52,20 @@ public class GameLogic {
         walls.add(wall1);
         walls.add(wall2);
         walls.add(wall3);
-        startEnemySpawner();
-        levelBackGround();
     }
-    private void levelBackGround() {
-        if (level == 1) {
-           BackGround background1 = new BackGround("pozadi1.png");
-           backgrounds.add(background1);
-        }
+    private void setlevel(){
+        enemies.clear();
+        backgrounds.clear();
+        coins.clear();
+        BackGround background = new BackGround("pozadi" + level + ".png");
+        backgrounds.add(background);
+        startEnemyWave();
+        startEnemySpawner();
+    }
+    private void nextlevel(){
+        level++;
+        character.setCoins(0);
+        setlevel();
     }
     private void spawnEnemyHoplit() {
         int x = (int) (Math.random() * 800);
@@ -135,6 +151,10 @@ public class GameLogic {
                 enemyTouchedPlayer();
                 }
               }
+                if (character.getHealth() <= 0) {
+                    isGameRunning = false;
+                    isGameOver = true;
+                }
             }
             enemyDeath();
         }
@@ -153,6 +173,9 @@ public class GameLogic {
                     character.addCoins(coin.amount);
                 }
             }
+        }
+        if (character.getCoins() >= coinsNeeded[level - 1] && character.isCollided(boat.getRectangle())) {
+            nextlevel();
         }
     }
         public boolean predictBallCollision(Direction direction){
@@ -208,6 +231,7 @@ public class GameLogic {
             }
         }
     }
+
     private void spawnCoin(int x, int y) {
         System.out.println("mince");
         Coins coin = new Coins(1,x,y);
@@ -215,14 +239,6 @@ public class GameLogic {
         synchronized (coins) {
             coins.add(coin);
         }
-
-    }
-    public void playerDeath() {
-        if (character.health <=0 ) {
-            gameover();
-        }
-    }
-    public void gameover() {
 
     }
     public void movePlayer(Direction direction) {
@@ -247,13 +263,14 @@ public class GameLogic {
         }
     }
     public void playerAttack() {
-        Rectangle attackRange = new Rectangle(character.getX() - 10, character.getY() - 20, character.getWidth() +50, character.getHeight() + 50);
-        int damage = character.getDamage();
-        System.out.println("Attack range: " + attackRange);
-
+        if (canAttack) {
+            canAttack = false;
+            attackRangeRectangle = new Rectangle(character.getX() - 10, character.getY() - 20, character.getWidth() +50, character.getHeight() + 50);
+            int damage = character.getDamage();
+            System.out.println("Attack range: " + attackRangeRectangle);
         synchronized (enemies) {
             for (Enemy enemy : enemies) {
-                if (attackRange.intersects(enemy.getRectangle()) && enemy.health !=0) {
+                if (attackRangeRectangle.intersects(enemy.getRectangle()) && enemy.health !=0) {
                     int newHealth = enemy.getHealth() - damage;
                     enemy.setHealth(newHealth);
                     System.out.println("životy nepiřtele jsou "+newHealth);
@@ -269,6 +286,14 @@ public class GameLogic {
                 }
             }
         }
+        }
+        Timer cooldownTimer = new Timer();
+        cooldownTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                canAttack = true;
+            }
+        }, 1500);
     }
     public Character getBall() {
         return character;
@@ -279,6 +304,9 @@ public class GameLogic {
     public ArrayList<Wall> getWalls() {
         return walls;
     }
+    public boolean isGameOver() {
+        return isGameOver;
+    }
     public ArrayList<BackGround> getBackGround() {
         return backgrounds;
     }
@@ -287,7 +315,19 @@ public class GameLogic {
         return menu;
     }
 
+    public Boat getBoat() {
+        return boat;
+    }
+
     public ArrayList<Coins> getCoins() {
         return coins;
+    }
+
+    public boolean isShowAttackRange() {
+        return showAttackRange;
+    }
+
+    public Rectangle getAttackRangeRectangle() {
+        return attackRangeRectangle;
     }
 }
